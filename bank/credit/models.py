@@ -26,7 +26,7 @@ class Credit(models.Model):
         ('Еженедельно', 'Еженедельно'),
         ('Ежемесячно', 'Ежемесячно'),
     )
-    custumer = models.ForeignKey(Customer, on_delete=models.CASCADE, blank=False, verbose_name='Ф.И.О.')
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, blank=False, verbose_name='Ф.И.О.')
     filial = models.CharField(blank=False, max_length=50, verbose_name='Филиал')
     pay_count = models.IntegerField(blank=False, verbose_name='Количество платежей')
     period_type = models.CharField(blank=False, max_length=20, choices=PERIOD, default='Периодичнось выплат')
