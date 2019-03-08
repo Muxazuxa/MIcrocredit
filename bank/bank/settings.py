@@ -113,9 +113,9 @@ LOGIN_URL = '/credit/login'
 
 LOGIN_REDIRECT_URL = '/credit/customers'
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'ru_RU'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Bishkek'
 
 USE_I18N = True
 

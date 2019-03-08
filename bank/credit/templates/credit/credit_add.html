@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>Правки</title>
+{% endblock %}
+
+{% block body%}
+<div class="container">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form method="post">
+                {% csrf_token %}
+                <div class="modal-header">
+                    <h4 class="modal-title">Правки</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Ф.И.О.</label>
+                        <input type="text" class="form-control" name="customer" {% if form.customer.value != None %}value="{{ form.customer.value|stringformat:'s' }}"{% endif %}
+       maxlength="30" required>
+                    </div>
+                    <div class="form-group">
+                        <label>INN</label>
+                        <input type="text" class="form-control" name="user" {% if form.user.value != None %}value="{{ form.user.value|stringformat:'s' }}"{% endif %}
+       maxlength="30" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Паспорт</label>
+                        <input type="text" class="form-control" name="passport" {% if form.passport.value != None %}value="{{ form.passport.value|stringformat:'s' }}"{% endif %}
+       maxlength="30" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Адрес</label>
+                        <input type="text" class="form-control" name="address" {% if form.address.value != None %}value="{{ form.address.value|stringformat:'s' }}"{% endif %}
+       maxlength="30" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Место работы</label>
+                        <input type="text" class="form-control" name="job_place" {% if form.job_place.value != None %}value="{{ form.job_place.value|stringformat:'s' }}"{% endif %}
+       maxlength="30" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Контакты</label>
+                        <input type="text" class="form-control" name="contacts" {% if form.contacts.value != None %}value="{{ form.contacts.value|stringformat:'s' }}"{% endif %}
+       maxlength="30" required>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-info">Обновить</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
