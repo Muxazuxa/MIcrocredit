@@ -33,6 +33,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'credit',
+    'bootstrap_select.apps.BootstrapSelectConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -117,9 +118,11 @@ LANGUAGE_CODE = 'ru_RU'
 
 TIME_ZONE = 'Asia/Bishkek'
 
+DATE_FORMAT = '%d-%m-%Y'
+
 USE_I18N = True
 
-USE_L10N = True
+USE_L10N = False
 
 USE_TZ = True
 

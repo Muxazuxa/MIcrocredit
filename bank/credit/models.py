@@ -34,7 +34,7 @@ class Credit(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, verbose_name='Ф.И.О.')
     filial = models.CharField(blank=False, max_length=50, verbose_name='Филиал')
     pay_count = models.IntegerField(blank=False, verbose_name='Количество платежей')
-    period_type = models.CharField(blank=False, max_length=20, choices=PERIOD, default='Периодичнось выплат')
+    period_type = models.CharField(blank=False, max_length=20, verbose_name='Периодичнось выплат')
     percent = models.IntegerField(blank=False, verbose_name='Процент')
     summ = models.DecimalField(blank=False, decimal_places=2, max_digits=10, verbose_name='Сумма выдачи')
     data_get = models.DateField(blank=False, verbose_name='Дата получения')

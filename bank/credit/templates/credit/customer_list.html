@@ -41,7 +41,7 @@
                             <a href="{% url 'credit:customer_update' customer.id %}" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Поправить">&#xE254;</i></a>
                           </td>
 						<td>
-							<a href="{% url 'credit:credit_add' pk=customer.id %}" class="add" data-toggle="modal"><i class="material-icons">&#xE147;</i></a>
+							<a href="{% url 'credit:credit_add' customer.id %}" class="add" data-toggle="modal"><i class="material-icons">&#xE147;</i></a>
 						</td>
                     </tr>
                 </tbody>

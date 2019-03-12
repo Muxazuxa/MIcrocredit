@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block head %}
-<title>Правки</title>
+<title>Кредит</title>
 {% endblock %}
 
 {% block body%}
@@ -11,41 +11,76 @@
             <form method="post">
                 {% csrf_token %}
                 <div class="modal-header">
-                    <h4 class="modal-title">Правки</h4>
+                    <h4 class="modal-title">Кредит</h4>
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
+                        {% if form.non_field_errors %}
+                            <ul>
+                              {% for error in form.non_field_errors %}
+                                <label>{{ error }}</label>
+                              {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </div>
+                    <div class="form-group">
                         <label>Ф.И.О.</label>
-                        <input type="text" class="form-control" name="customer" {% if form.customer.value != None %}value="{{ form.customer.value|stringformat:'s' }}"{% endif %}
-       maxlength="30" required>
+                        <label>{{form.customer.errors}}</label>
+                        <input type="text" class="form-control" name="customer" value="{{form.customer_fio.value}}" readonly>
+                        <input type="hidden" name="customer" value="{{ form.customer.value}}">
                     </div>
                     <div class="form-group">
                         <label>INN</label>
-                        <input type="text" class="form-control" name="user" {% if form.user.value != None %}value="{{ form.user.value|stringformat:'s' }}"{% endif %}
-       maxlength="30" required>
+                        <label>{{form.inn.errors}}</label>
+                        <input type="text" class="form-control" name="inn" value="{{ form.customer_inn.value|stringformat:'s' }}" readonly>
                     </div>
                     <div class="form-group">
-                        <label>Паспорт</label>
-                        <input type="text" class="form-control" name="passport" {% if form.passport.value != None %}value="{{ form.passport.value|stringformat:'s' }}"{% endif %}
-       maxlength="30" required>
+                        <label>Поручитель</label>
+                        <label>{{form.user.errors}}</label>
+                        <input type="text" class="form-control" name="user" value="{{ form.user_username.value|stringformat:'s' }}" readonly>
+                        <input type="hidden" name="user" value="{{ form.user.value}}">
                     </div>
                     <div class="form-group">
-                        <label>Адрес</label>
-                        <input type="text" class="form-control" name="address" {% if form.address.value != None %}value="{{ form.address.value|stringformat:'s' }}"{% endif %}
-       maxlength="30" required>
+                        <label>Сумма кредита</label>
+                        <label>{{form.summ.errors}}</label>
+                        <input type="text" class="form-control" name="summ" maxlength="30" required>
                     </div>
                     <div class="form-group">
-                        <label>Место работы</label>
-                        <input type="text" class="form-control" name="job_place" {% if form.job_place.value != None %}value="{{ form.job_place.value|stringformat:'s' }}"{% endif %}
-       maxlength="30" required>
+                        <label>Проценты</label>
+                        <label>{{form.percent.errors}}</label>
+                        <input type="text" class="form-control" name="percent" required>
                     </div>
                     <div class="form-group">
-                        <label>Контакты</label>
-                        <input type="text" class="form-control" name="contacts" {% if form.contacts.value != None %}value="{{ form.contacts.value|stringformat:'s' }}"{% endif %}
-       maxlength="30" required>
+                        <label>Количество платежей</label>
+                        <label>{{form.pay_count.errors}}</label>
+                        <input type="text" class="form-control" name="pay_count">
+                    </div>
+                    <div class="form-group">
+                        <label>Периодичность платежей</label>
+                        <label>{{form.period_type.errors}}</label><br>
+                             <select class="selectpicker">
+                                {% for x,y in form.fields.period_type.choices %}
+                                   <option value="{{ x }}" {% if form.fields.period_type.value == x %} selected{% endif %}>{{ y }}</option>
+                                {% endfor %}
+                            </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Сумма возврата</label>
+                        <label>{{form.summ_return.errors}}</label>
+                        <input type="text" class="form-control" name="summ_return">
+                    </div>
+                    <div class="form-group">
+                        <label>Дата получения</label>
+                        <label>{{form.data_get.errors}}</label>
+                        <input type="text" class="form-control" name="data_get" value="{{ form.data_get.value }}" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label>Дата возврата</label>
+                        <label>{{form.data_close.errors}}</label>
+                        <input type="text" class="form-control" name="data_close">
                     </div>
                 </div>
-                <button type="submit" class="btn btn-info">Обновить</button>
+                <button type="submit" class="btn btn-info">Выдать кредит</button>
             </form>
         </div>
     </div>

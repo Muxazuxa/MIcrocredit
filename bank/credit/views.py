@@ -1,5 +1,6 @@
 from . forms import *
 from django.urls import reverse
+from django.utils import timezone
 from django.views.generic import *
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import *
@@ -27,18 +28,22 @@ class CustomerUpdateView(LoginRequiredMixin, UpdateView):
 
 class CreditCreateView(LoginRequiredMixin, CreateView):
     model = Credit
-    fields = '__all__'
+    form_class = CreditCreateForm
     template_name = 'credit/credit_add.html'
 
     def get_form(self):
         form = super(CreditCreateView, self).get_form()
         initial_base = self.get_initial()
-        initial_base['customer'] = Customer.objects.get(pk=self.kwargs['pk'])
-        initial_base['user'] = self.request.user.id
+        customer = Customer.objects.get(pk=self.kwargs['pk'])
+        initial_base['customer'] = customer
+        initial_base['customer_fio'] = customer.fio
+        initial_base['customer_inn'] = customer.inn
+        user = self.request.user
+        initial_base['user'] = user
+        initial_base['user_username'] = user.username
+        initial_base['data_get'] = timezone.now()
         form.initial = initial_base
         return form
-
-
 
 
 
