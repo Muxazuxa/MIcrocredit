@@ -24,41 +24,44 @@
                         {% endif %}
                     </div>
                     <div class="form-group">
+                        <input type="hidden" class="form-control" name="customer" value="{{ form.customer.value }}">
+                        <input type="hidden" class="form-control" name="user" value="{{ form.user.value }}">
+                        <input type="hidden" class="form-control" name="summ_leave" id="summ_leave">
+                    </div>
+                    <div class="form-group">
                         <label>Ф.И.О.</label>
                         <label>{{form.customer.errors}}</label>
-                        <input type="text" class="form-control" name="customer" value="{{form.customer_fio.value}}" readonly>
-                        <input type="hidden" name="customer" value="{{ form.customer.value}}">
+                        <input type="text" class="form-control" name="customer_fio" value="{{ form.customer_fio.value }}" required readonly>
                     </div>
                     <div class="form-group">
                         <label>INN</label>
-                        <label>{{form.inn.errors}}</label>
-                        <input type="text" class="form-control" name="inn" value="{{ form.customer_inn.value|stringformat:'s' }}" readonly>
+                        <label>{{form.customer_inn.errors}}</label>
+                        <input type="number" class="form-control" name="customer_inn" maxlength="30" value="{{form.customer_inn.value}}" required readonly>
                     </div>
                     <div class="form-group">
                         <label>Поручитель</label>
-                        <label>{{form.user.errors}}</label>
-                        <input type="text" class="form-control" name="user" value="{{ form.user_username.value|stringformat:'s' }}" readonly>
-                        <input type="hidden" name="user" value="{{ form.user.value}}">
+                        <label>{{form.user_username.errors}}</label>
+                        <input type="text" class="form-control" name="user_username" value="{{ form.user_username.value }}" required readonly>
+                    </div>
+                    <div class="form-group">
+                        <label>Филиал</label>
+                        <label>{{form.filial.errors}}</label>
+                        <input type="text" class="form-control" name="filial" required>
                     </div>
                     <div class="form-group">
                         <label>Сумма кредита</label>
                         <label>{{form.summ.errors}}</label>
-                        <input type="text" class="form-control" name="summ" maxlength="30" required>
+                        <input type="number" class="form-control" name="summ" id="summ" maxlength="30" required>
                     </div>
                     <div class="form-group">
                         <label>Проценты</label>
                         <label>{{form.percent.errors}}</label>
-                        <input type="text" class="form-control" name="percent" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Количество платежей</label>
-                        <label>{{form.pay_count.errors}}</label>
-                        <input type="text" class="form-control" name="pay_count">
+                        <input type="number" class="form-control" name="percent" id="percent" required>
                     </div>
                     <div class="form-group">
                         <label>Периодичность платежей</label>
                         <label>{{form.period_type.errors}}</label><br>
-                             <select class="selectpicker">
+                             <select name="period_type" class="selectpicker" id="period_type"required>
                                 {% for x,y in form.fields.period_type.choices %}
                                    <option value="{{ x }}" {% if form.fields.period_type.value == x %} selected{% endif %}>{{ y }}</option>
                                 {% endfor %}
@@ -67,17 +70,22 @@
                     <div class="form-group">
                         <label>Сумма возврата</label>
                         <label>{{form.summ_return.errors}}</label>
-                        <input type="text" class="form-control" name="summ_return">
+                        <input type="number" class="form-control" name="summ_return" id="summ_return" required readonly>
                     </div>
                     <div class="form-group">
                         <label>Дата получения</label>
                         <label>{{form.data_get.errors}}</label>
-                        <input type="text" class="form-control" name="data_get" value="{{ form.data_get.value }}" readonly>
+                        <input type="date" class="form-control" name="data_get" id="data_get" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Количество платежей</label>
+                        <label>{{form.pay_count.errors}}</label>
+                        <input type="number" class="form-control" name="pay_count" id="pay_count" required>
                     </div>
                     <div class="form-group">
                         <label>Дата возврата</label>
                         <label>{{form.data_close.errors}}</label>
-                        <input type="text" class="form-control" name="data_close">
+                        <input type="date" class="form-control" name="data_close" id="data_close" required readonly>
                     </div>
                 </div>
                 <button type="submit" class="btn btn-info">Выдать кредит</button>
@@ -85,5 +93,48 @@
         </div>
     </div>
 </div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js "></script>
+
+<script>
+$('#summ, #percent').on('input',function(e){
+    $('#summ_return').val((parseFloat($('#summ').val()) / 100 * parseInt($('#percent').val())) + parseFloat($('#summ').val()));
+    $('#summ_leave').val((parseFloat($('#summ').val()) / 100 * parseInt($('#percent').val())) + parseFloat($('#summ').val()));
+});
+</script>
+<script>
+;(function($, window, document, undefined){
+    $("#pay_count").on("change", function(){
+       var date = new Date($("#data_get").val()),
+           period = $("#period_type").val(),
+           days = parseInt($("#pay_count").val(), 10);
+
+        if(period == 'Еженедельно'){
+        days = days * 7;
+        }
+        else if(period == 'Ежемесячно'){
+        days = days * 31;
+        }
+        else{
+        days = days *1;
+        }
+        if(!isNaN(date.getTime())){
+            date.setDate(date.getDate() + days);
+
+            $("#data_close").val(date.toInputFormat());
+        } else {
+            alert("Invalid Date");
+        }
+    });
+
+
+    //From: http://stackoverflow.com/questions/3066586/get-string-in-yyyymmdd-format-from-js-date-object
+    Date.prototype.toInputFormat = function() {
+       var yyyy = this.getFullYear().toString();
+       var mm = (this.getMonth()+1).toString(); // getMonth() is zero-based
+       var dd  = this.getDate().toString();
+       return yyyy + "-" + (mm[1]?mm:"0"+mm[0]) + "-" + (dd[1]?dd:"0"+dd[0]); // padding
+    };
+})(jQuery, this, document);
+</script>
 {% endblock %}
 

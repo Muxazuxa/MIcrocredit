@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>Кредиты</title>
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="table-wrapper">
+            <div class="table-title">
+                <div class="row">
+                    <div class="col-sm-6">
+						<h2><b>Кредиты</b></h2>
+					</div>
+                    <div class="col-sm-6">
+						<a href="{% url 'credit:customer_list' %}" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Добавить Кредит</span></a>
+					</div>
+                </div>
+            </div>
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>Ф.И.О.</th>
+                        <th>Сумма выдачи</th>
+                        <th>Сумма возврата</th>
+                        <th>Ставка</th>
+                        <th>Дата получения</th>
+                        <th>Дата погашения</th>
+                        <th>Периодичность</th>
+                        <th>Остаток</th>
+                        <th>Поручитель</th>
+                    </tr>
+                </thead>
+                {% for credit in credits %}
+                <tbody>
+                    <tr>
+                        <td>{{ credit.customer }}</td>
+                        <td>{{ credit.summ }} сом</td>
+						<td>{{ credit.summ_return }} сом</td>
+                        <td>{{ credit.percent }}%</td>
+                        <td>{{ credit.data_get }}</td>
+                        <td>{{ credit.data_close }}</td>
+                        <td>{{ credit.period_type }}</td>
+                        <td>{{ credit.summ_leave }}</td>
+                        <td>{{ credit.user.username }}</td>
+                    </tr>
+                </tbody>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+{% endblock %}

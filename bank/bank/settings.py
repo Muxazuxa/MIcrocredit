@@ -33,6 +33,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'credit',
+    'crispy_forms',
     'bootstrap_select.apps.BootstrapSelectConfig',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -41,6 +42,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 ]
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -118,11 +121,9 @@ LANGUAGE_CODE = 'ru_RU'
 
 TIME_ZONE = 'Asia/Bishkek'
 
-DATE_FORMAT = '%d-%m-%Y'
-
 USE_I18N = True
 
-USE_L10N = False
+USE_L10N = True
 
 USE_TZ = True
 
