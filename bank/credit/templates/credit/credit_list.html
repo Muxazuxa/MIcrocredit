@@ -28,7 +28,7 @@
                         <th>Дата погашения</th>
                         <th>Периодичность</th>
                         <th>Остаток</th>
-                        <th>Поручитель</th>
+                        <th>Исполнитель</th>
                     </tr>
                 </thead>
                 {% for credit in credits %}
@@ -43,6 +43,9 @@
                         <td>{{ credit.period_type }}</td>
                         <td>{{ credit.summ_leave }}</td>
                         <td>{{ credit.user.username }}</td>
+                        <td>
+							<a href="{% url 'credit:graphic_add' credit.id %}" class="add" data-toggle="modal"><i class="material-icons">&#xE147;</i></a>
+						</td>
                     </tr>
                 </tbody>
                 {% endfor %}

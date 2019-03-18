@@ -56,12 +56,16 @@ class Credit(models.Model):
 
 
 class Graphic(models.Model):
-    credit = models.OneToOneField(Credit, on_delete='')
+    credit = models.ForeignKey(Credit, on_delete=models.CASCADE)
     summ_cut = models.DecimalField(decimal_places=2, max_digits=10, verbose_name='Сумма погашения')
-    date = models.DateField()
+    date = models.DateField(auto_now_add=True, verbose_name='Дата погашения')
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, verbose_name='Исполнитель')
 
     def __str__(self):
         return self.credit
+
+    def get_absolute_url(self):
+        return reverse('credit:credit_list')
 
     class Meta:
         verbose_name = 'График'

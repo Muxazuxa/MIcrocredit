@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>Погашение</title>
+{% endblock %}
+
+{% block body%}
+<div class="container">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form method="post">
+                {% csrf_token %}
+                <div class="modal-header">
+                    <h4 class="modal-title">Погашение</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        {% if form.non_field_errors %}
+                            <ul>
+                              {% for error in form.non_field_errors %}
+                                <label>{{ error }}</label>
+                              {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </div>
+                    <div class="form-group">
+                        <input type="hidden" class="form-control" name="credit" value="{{ form.credit.value }}">
+                        <input type="hidden" class="form-control" name="user" value="{{ form.user.value }}">
+                    </div>
+                    <div class="form-group">
+                        <label>Ф.И.О.</label>
+                        <label>{{form.customer.errors}}</label>
+                        <input type="text" class="form-control" name="customer" value="{{ form.customer.value }}" required readonly>
+                    </div>
+                    <div class="form-group">
+                        <label>Исполнитель</label>
+                        <label>{{form.user_username.errors}}</label>
+                        <input type="text" class="form-control" name="user_username" value="{{ form.user_username.value }}" required readonly>
+                    </div>
+                    <div class="form-group">
+                        <label>Остаток</label>
+                        <label>{{form.summ_leave.errors}}</label>
+                        <input type="number" class="form-control" name="summ_leave" value="{{ form.summ_leave.value }}" required readonly>
+                    </div>
+                    <div class="form-group">
+                        <label>Сумма погашения</label>
+                        <label>{{form.summ_cut.errors}}</label>
+                        <input type="number" class="form-control" name="summ_cut" id="summ_cut" maxlength="30" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Дата погашения</label>
+                        <label>{{form.date.errors}}</label>
+                        <input type="date" class="form-control" name="date" id="date" required>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-info">Погасить</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
