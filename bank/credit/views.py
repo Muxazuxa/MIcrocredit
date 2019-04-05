@@ -1,6 +1,4 @@
 from . forms import *
-# from django.urls import reverse
-from django.dispatch import receiver
 from django.views.generic import *
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import *
@@ -52,6 +50,14 @@ class CreditListView(LoginRequiredMixin, ListView):
         return Credit.objects.all()
 
 
+class GraphicListView(LoginRequiredMixin, ListView):
+    context_object_name = 'graphics'
+    template_name = 'credit/graphic_list.html'
+
+    def get_queryset(self):
+        return Graphic.objects.all()
+
+
 class GraphicCreateView(LoginRequiredMixin, CreateView):
     form_class = GraphicCreateForm
     template_name = 'credit/graphic_add.html'
@@ -70,10 +76,6 @@ class GraphicCreateView(LoginRequiredMixin, CreateView):
         return form
 
 
-@receiver(post_save, sender=GraphicCreateView, dispatch_uid="update_summ")
-def update_summ(sender, instance, **kwargs):
-    instance.credit.summ_leave -= instance.summ_cut
-    instance.credit.save()
 
 
 

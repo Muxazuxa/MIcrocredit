@@ -1,7 +1,9 @@
 from django.db import models
 from django.urls import reverse
 from django.contrib.auth.models import User
+from datetime import date
 from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 # Create your models here.
 
@@ -13,6 +15,7 @@ class Customer(models.Model):
     address = models.CharField(blank=True, max_length=100, verbose_name='Адрес')
     job_place = models.CharField(blank=True, max_length=100, verbose_name='Место Бизнеса')
     contacts = models.CharField(blank=True, max_length=100, verbose_name='Контакты')
+    date = models.DateField(auto_now_add=True, verbose_name='Дата создания')
 
     def __str__(self):
         return str(self.fio)
@@ -21,6 +24,7 @@ class Customer(models.Model):
         return reverse('credit:customer_list')
 
     class Meta:
+        ordering = ["fio"]
         unique_together = ['inn', 'passport']
         verbose_name='Заемщик'
         verbose_name_plural='Заемщики'
@@ -43,12 +47,19 @@ class Credit(models.Model):
     data_close = models.DateField(blank=False, verbose_name='Дата погашения')
     summ_return = models.DecimalField(blank=False, decimal_places=2, max_digits=10, verbose_name='Сумма возврата')
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, verbose_name='Исполнитель')
+    date = models.DateField(auto_now_add=True, verbose_name='Дата создания')
 
     def __str__(self):
         return str(self.customer)
 
     def get_absolute_url(self):
-        return reverse('credit:customer_list')
+        return reverse('credit:credit_list')
+
+    @property
+    def is_overdue(self):
+        if self.data_close and date.today() > self.data_close:
+            return True
+        return False
 
     class Meta:
         verbose_name = 'Кредит'
@@ -58,6 +69,7 @@ class Credit(models.Model):
 class Graphic(models.Model):
     credit = models.ForeignKey(Credit, on_delete=models.CASCADE)
     summ_cut = models.DecimalField(decimal_places=2, max_digits=10, verbose_name='Сумма погашения')
+    summ_after_cut = models.DecimalField(decimal_places=2, max_digits=10, verbose_name='Сумма после погашения')
     date = models.DateField(auto_now_add=True, verbose_name='Дата погашения')
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, verbose_name='Исполнитель')
 
@@ -65,14 +77,18 @@ class Graphic(models.Model):
         return self.credit
 
     def get_absolute_url(self):
-        return reverse('credit:credit_list')
+        return reverse('credit:graphic_list')
 
     class Meta:
         verbose_name = 'График'
         verbose_name_plural = 'График'
 
 
-
+@receiver(post_save, sender=Graphic, dispatch_uid="update_stock_count")
+def update_stock(sender, instance, **kwargs):
+    instance.credit.summ_leave -= instance.summ_cut
+    instance.summ_after_cut = instance.credit.summ_leave
+    instance.credit.save()
 
 
 

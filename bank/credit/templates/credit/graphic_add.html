@@ -40,12 +40,17 @@
                     <div class="form-group">
                         <label>Остаток</label>
                         <label>{{form.summ_leave.errors}}</label>
-                        <input type="number" class="form-control" name="summ_leave" value="{{ form.summ_leave.value }}" required readonly>
+                        <input type="number" class="form-control" name="summ_leave" id="summ_leave" value="{{ form.summ_leave.value }}" required readonly>
                     </div>
                     <div class="form-group">
                         <label>Сумма погашения</label>
                         <label>{{form.summ_cut.errors}}</label>
                         <input type="number" class="form-control" name="summ_cut" id="summ_cut" maxlength="30" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Сумма после погашения</label>
+                        <label>{{form.summ_after_cut.errors}}</label>
+                        <input type="number" class="form-control" name="summ_after_cut" id="summ_after_cut" required readonly>
                     </div>
                     <div class="form-group">
                         <label>Дата погашения</label>
@@ -58,4 +63,12 @@
         </div>
     </div>
 </div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js "></script>
+
+<script>
+$('#summ_cut, #summ_leave').on('input',function(e){
+    $('#summ_after_cut').val((parseFloat($('#summ_leave').val())) - parseFloat($('#summ_cut').val()));
+});
+</script>
 {% endblock %}
