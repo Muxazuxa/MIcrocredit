@@ -18,6 +18,7 @@ urlpatterns = [
     url(r'^credit/add/(?P<pk>\d+)/$', views.CreditCreateView.as_view(), name='credit_add'),
     # Graphic url
     url(r'^credit/cut/(?P<pk>\d+)/$', views.GraphicCreateView.as_view(), name='graphic_add'),
-    url(r'^graphics/$', views.GraphicListView.as_view(), name='graphic_list')
+    url(r'^graphics/$', views.GraphicListView.as_view(), name='graphic_list'),
+    url(r'^graphic/(?P<pk>\d+)/$', views.CreditGraphicView.as_view(), name='graphic')
 
 ]

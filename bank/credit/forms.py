@@ -13,6 +13,14 @@ class CreditCreateForm(ModelForm):
     customer_inn = CharField(max_length=100)
     user_username = CharField(max_length=100)
 
+    def clean(self):
+        cleaned_data = super(CreditCreateForm, self).clean()
+        summ = cleaned_data.get('summ')
+        cash = Cash.objects.get()
+        if summ > cash.cash:
+            raise ValidationError({'summ': ["Сумма не может быть больше оставшейся суммы"]})
+        return cleaned_data
+
     class Meta:
         model = Credit
         fields = '__all__'
@@ -30,7 +38,7 @@ class GraphicCreateForm(ModelForm):
         summ_leave = cleaned_data.get('summ_leave')
         if summ_cut > summ_leave:
             raise ValidationError({'summ_cut': ["Сумма погашения не может быть больше оставшейся суммы"]})
-        return cleaned_data
+        return cleaned_data  
 
     class Meta:
         model = Graphic

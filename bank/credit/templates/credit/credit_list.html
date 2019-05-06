@@ -28,7 +28,7 @@
                         <th>Дата погашения</th>
                         <th>Периодичность</th>
                         <th>Остаток</th>
-                        <th>Исполнитель</th>
+                        <th>User</th>
                     </tr>
                 </thead>
                 {% for credit in credits %}
@@ -44,7 +44,10 @@
                         <td>{{ credit.summ_leave }}</td>
                         <td>{{ credit.user.username }}</td>
                         <td>
-							<a href="{% url 'credit:graphic_add' credit.id %}" class="add" data-toggle="modal"><i class="material-icons">&#xE15B;</i></a>
+							<a href="{% url 'credit:graphic_add' credit.id %}" style="color:red;" data-toggle="modal"><i class="material-icons">&#xE15B;</i></a>
+						</td>
+                        <td>
+							<a href="{% url 'credit:graphic' credit.id %}" style="color:black;" data-toggle="modal"><i class="material-icons">&#xE8E5;</i></a>
 						</td>
                     </tr>
                 </tbody>

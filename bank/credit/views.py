@@ -2,12 +2,14 @@ from . forms import *
 from django.views.generic import *
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import *
+from django.shortcuts import render
 # Create your views here.
 
 
 class CustomerListView(LoginRequiredMixin, ListView):
     context_object_name = 'customers'
     template_name = 'credit/customer_list.html'
+    paginate_by = 10
 
     def get_queryset(self):
         return Customer.objects.all()
@@ -45,6 +47,7 @@ class CreditCreateView(LoginRequiredMixin, CreateView):
 class CreditListView(LoginRequiredMixin, ListView):
     context_object_name = 'credits'
     template_name = 'credit/credit_list.html'
+    paginate_by = 10
 
     def get_queryset(self):
         return Credit.objects.all()
@@ -53,6 +56,7 @@ class CreditListView(LoginRequiredMixin, ListView):
 class GraphicListView(LoginRequiredMixin, ListView):
     context_object_name = 'graphics'
     template_name = 'credit/graphic_list.html'
+    paginate_by = 10
 
     def get_queryset(self):
         return Graphic.objects.all()
@@ -76,11 +80,10 @@ class GraphicCreateView(LoginRequiredMixin, CreateView):
         return form
 
 
-
-
-
-
-
+class CreditGraphicView(LoginRequiredMixin, DetailView):
+    model = Credit
+    context_object_name = 'credit'
+    template_name = 'credit/graphic.html'
 
 
 

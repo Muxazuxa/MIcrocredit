@@ -70,7 +70,7 @@ class Graphic(models.Model):
     credit = models.ForeignKey(Credit, on_delete=models.CASCADE)
     summ_cut = models.DecimalField(decimal_places=2, max_digits=10, verbose_name='Сумма погашения')
     summ_after_cut = models.DecimalField(decimal_places=2, max_digits=10, verbose_name='Сумма после погашения')
-    date = models.DateField(auto_now_add=True, verbose_name='Дата погашения')
+    date = models.DateField(blank=False, verbose_name='Дата погашения')
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, verbose_name='Исполнитель')
 
     def __str__(self):
@@ -80,18 +80,33 @@ class Graphic(models.Model):
         return reverse('credit:graphic_list')
 
     class Meta:
+        ordering = ["-date"]
         verbose_name = 'График'
         verbose_name_plural = 'График'
 
 
-@receiver(post_save, sender=Graphic, dispatch_uid="update_stock_count")
-def update_stock(sender, instance, **kwargs):
+@receiver(post_save, sender=Graphic, dispatch_uid="update_aumm_leave")
+def update_summ_leave(sender, instance, **kwargs):
     instance.credit.summ_leave -= instance.summ_cut
     instance.summ_after_cut = instance.credit.summ_leave
+    cash = Cash.objects.get()
+    cash.cash += instance.summ_cut
+    cash.save()
     instance.credit.save()
 
 
+class Cash(models.Model):
+    cash = models.DecimalField(decimal_places=2, max_digits=10, verbose_name='Касса')
 
+    def get_absolute_url(self):
+        return reverse('credit:credit_list')
+
+    def __str__(self):  
+        return str(self.cash)
+
+    class Meta:
+        verbose_name = 'Касса'
+        verbose_name_plural = 'Касса'
 
 
 
